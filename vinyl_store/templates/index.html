@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vintage Vinyl Store</title>
+  <meta name="description" content="Дипломный интернет-магазин виниловых пластинок на собственной REST API библиотеке EasyApi.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Vintage Vinyl Store home">
+      <span class="brand-disc"></span>
+      <span>Vintage Vinyl Store</span>
+    </a>
+    <nav class="main-nav">
+      <a href="#catalog">Каталог</a>
+      <a href="#wishlist">Избранное</a>
+      <a href="#cart">Корзина <b id="cartCount">0</b></a>
+      <a href="#profile">Профиль</a>
+      <a href="#admin" id="adminLink" hidden>Админ</a>
+    </nav>
+    <div class="auth-actions" id="authActions"></div>
+  </header>
+
+  <main>
+    <section id="home" class="hero page active">
+      <div class="hero-copy">
+        <p class="eyebrow">70s mood · REST API powered</p>
+        <h1>Винил с душой, API с характером.</h1>
+        <p>Дипломный проект демонстрирует CRUD, JWT, маршрутизацию декораторами, MySQL через PyMySQL и единую JSON-обработку ошибок в собственной библиотеке EasyApi.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#catalog">Перейти в каталог</a>
+          <button class="button ghost" data-open="login">Войти</button>
+        </div>
+      </div>
+      <div class="turntable" aria-hidden="true">
+        <div class="record"><span></span></div>
+        <div class="tonearm"></div>
+      </div>
+    </section>
+
+    <section id="catalog" class="page section">
+      <div class="section-title">
+        <p class="eyebrow">crate digging</p>
+        <h2>Каталог пластинок</h2>
+      </div>
+      <div class="filters panel">
+        <input id="searchInput" type="search" placeholder="Поиск: артист, альбом, описание">
+        <select id="categorySelect"><option value="">Все жанры</option></select>
+        <select id="sortSelect">
+          <option value="new">Сначала новые</option>
+          <option value="rating">По рейтингу</option>
+          <option value="price_asc">Цена ↑</option>
+          <option value="price_desc">Цена ↓</option>
+          <option value="year">Год релиза</option>
+        </select>
+        <button class="button primary" id="applyFilters">Найти</button>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <section id="product" class="page section">
+      <div id="productDetails" class="product-details"></div>
+      <div class="panel reviews-panel">
+        <h3>Отзывы</h3>
+        <div id="reviewsList"></div>
+        <form id="reviewForm" class="stacked-form">
+          <input name="title" placeholder="Заголовок отзыва">
+          <select name="rating">
+            <option value="5">5 — великолепно</option>
+            <option value="4">4 — отлично</option>
+            <option value="3">3 — хорошо</option>
+            <option value="2">2 — спорно</option>
+            <option value="1">1 — плохо</option>
+          </select>
+          <textarea name="content" placeholder="Ваши впечатления" required></textarea>
+          <button class="button primary">Отправить на модерацию</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="cart" class="page section narrow">
+      <div class="section-title"><h2>Корзина</h2></div>
+      <div class="cartmoment">
+      <div id="cartView" class="panel"></div>
+      <form id="checkoutForm" class="panel stacked-form">
+        <h3>Оформление заказа</h3>
+        <input name="shipping_address" placeholder="Адрес доставки" required>
+        <input name="shipping_city" placeholder="Город">
+        <input name="shipping_postal_code" placeholder="Индекс">
+        <input name="customer_phone" placeholder="Телефон">
+        <input name="customer_email" placeholder="Email">
+        <input name="promo_code" placeholder="Промокод VINYL20">
+        <textarea name="notes" placeholder="Комментарий"></textarea>
+        <button class="button primary">Оформить заказ</button>
+      </form></div>
+    </section>
+
+    <section id="wishlist" class="page section narrow">
+      <div class="section-title"><h2>Избранное</h2></div>
+      <div id="wishlistView" class="product-grid compact"></div>
+    </section>
+
+    <section id="profile" class="page section narrow">
+      <div class="section-title"><h2>Профиль и история заказов</h2></div>
+      <div id="profileView" class="panel"></div>
+      <div id="ordersView" class="orders-list"></div>
+    </section>
+
+    <section id="login" class="page section auth-page narrow">
+      <div class="auth-grid">
+        <form id="loginForm" class="panel stacked-form">
+          <h2>Вход</h2>
+          <input name="identity" placeholder="Логин или email" required>
+          <input name="password" type="password" placeholder="Пароль" required>
+          <button class="button primary">Войти</button>
+        </form>
+        <form id="registerForm" class="panel stacked-form">
+          <h2>Регистрация</h2>
+          <input name="username" placeholder="Логин" required>
+          <input name="email" type="email" placeholder="Email" required>
+          <input name="password" type="password" placeholder="Пароль от 6 символов" required>
+          <input name="first_name" placeholder="Имя">
+          <input name="last_name" placeholder="Фамилия">
+          <button class="button primary">Создать аккаунт</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="admin" class="page section">
+      <div class="section-title"><h2>Админ-панель</h2></div>
+      <div id="adminStats" class="stats-grid"></div>
+      <div class="admin-grid">
+        <form id="productForm" class="panel stacked-form">
+          <h3>Новый товар</h3>
+          <input name="title" placeholder="Альбом" required>
+          <input name="artist" placeholder="Исполнитель" required>
+          <input name="slug" placeholder="slug" required>
+          <input name="price" type="number" step="0.01" placeholder="Цена" required>
+          <input name="stock_quantity" type="number" placeholder="Остаток" value="1">
+          <input name="category_id" type="number" placeholder="ID категории">
+          <input name="label_id" type="number" placeholder="ID лейбла">
+          <input name="release_year" type="number" placeholder="Год">
+          <input name="image_url" placeholder="URL обложки">
+          <textarea name="description" placeholder="Описание"></textarea>
+          <button class="button primary">Добавить</button>
+        </form>
+        <div class="panel"><h3>Заказы</h3><div id="adminOrders"></div></div>
+        <div class="panel"><h3>Отзывы</h3><div id="adminReviews"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/static/js/app.js" type="module"></script>
+</body>
+</html>
