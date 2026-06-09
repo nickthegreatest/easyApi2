@@ -186,7 +186,7 @@ async function loadProfile() {
   if (!state.token) { location.hash = '#login'; return; }
   const profile = await api('/profile');
   const orders = await api('/orders');
-  qs('#profileView').innerHTML = `<h3>${profile.username}</h3><p>${profile.email}</p><p>Роль: ${profile.role}</p><p>${profile.first_name || ''} ${profile.last_name || ''}</p>`;
+  qs('#profileView').innerHTML = `<img src="/static/images/15.png" alt="" style="width: 80px; "> <h3>${profile.first_name } ${profile.last_name }</h3><h3>${profile.username}</h3><h3>${profile.email}</h3><p>Роль: ${profile.role}</p>`;
   qs('#ordersView').innerHTML = orders.map(order => `<div class="panel order-card"><b>${order.order_number}</b><span>${order.status}</span><span>${money(order.total_amount)}</span><small>${order.created_at}</small></div>`).join('') || '<div class="panel">Заказов пока нет.</div>';
 }
 

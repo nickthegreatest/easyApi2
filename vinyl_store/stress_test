@@ -1,0 +1,36 @@
+import requests
+import time
+import statistics
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+BASE_URL = "http://127.0.0.1:5000"
+TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsInVzZXJuYW1lIjoidGVzdDEiLCJyb2xlIjoidXNlciIsImV4cCI6MTc4MTE3NzE1Mn0.He6IiBPvn9cZmSjzaYHxzX7euvObebyXazoLA0pQLzA'
+
+def test_products():
+    start = time.time()
+    resp = requests.get(f"{BASE_URL}/products")
+    return time.time() - start, resp.status_code
+
+def test_cart():
+    start = time.time()
+    resp = requests.get(f"{BASE_URL}/cart", headers={"Authorization": f"Bearer {TOKEN}"})
+    return time.time() - start, resp.status_code
+
+def run_test(name, func, concurrent, total=1000):
+    times = []
+    errors = 0
+    with ThreadPoolExecutor(max_workers=concurrent) as executor:
+        futures = [executor.submit(func) for _ in range(total)]
+        for f in as_completed(futures):
+            t, status = f.result()
+            times.append(t)
+            if status != 200:
+                errors += 1
+    times.sort()
+    rps = total / sum(times) if sum(times) > 0 else 0
+    print(f"{name} | c={concurrent} | rps={rps:.1f} | avg={statistics.mean(times)*1000:.0f}ms | median={times[len(times)//2]*1000:.0f}ms | p95={times[int(len(times)*0.95)]*1000:.0f}ms | errors={errors}")
+
+if __name__ == "__main__":
+    for c in [10, 50, 100]:
+        run_test("products", test_products, c)
+        run_test("cart", test_cart, c)
